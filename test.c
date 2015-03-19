@@ -1,14 +1,11 @@
 #include <stdio.h>
 
-struct object
+#include "planets.h"
+
+int main(int argc, char **argv)
 {
-  long mass; //TODO make this a bignum
-  long position[]; //in m/s
-  long velocity[]; //in m/s
+	struct object *object = makeObjects(2, 3);
+	
 }
 
-struct system
-{
-  struct object planets[];
-}
 
