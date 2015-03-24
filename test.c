@@ -1,10 +1,15 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "planets.h"
+#define DIMENSION 2
+typedef OBJECT_TYPE(DIMENSION) planet;
+
 
 int main(int argc, char **argv)
 {
-	struct object *object = makeObjects(2, 3);
+	int size = sizeof (planet);
+	printf("%d", size);
 	
 }
 
