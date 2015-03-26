@@ -5,6 +5,7 @@
 
 #define DIMENSION 2
 typedef OBJECT_TYPE(DIMENSION) planet;
-typedef SYSTEM_TYPE(DIMENSION) system;
+typedef SYSTEM_TYPE(DIMENSION) gravitySystem;
 
-
+gravitySystem *makeSystem(int numPlanets);
+void simulate(gravitySystem *system);
