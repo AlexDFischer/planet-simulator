@@ -10,11 +10,11 @@ gravitySystem *makeSystem(int numPlanets)
 {
 	int bytesNeeded = sizeof(gravitySystem) + numPlanets * sizeof(planet);
 	gravitySystem *system = (gravitySystem *)malloc(bytesNeeded);
-	system->inverseG = STANDARD_INVERSE_GRAVITY;
+	system->G = STANDARD_GRAVITY;
 	
 	/* now set the pointers in the objects array to the rights pointers */
 	object *objPtr = system + sizeof(gravitySystem);
-	for (int i = 0; i < numPlanets; i++)
+3	for (int i = 0; i < numPlanets; i++)
 	{
 		system->objects[i] = objPtr;
 		objPtr++;
@@ -36,17 +36,17 @@ void printSystemLocations()
 /**
  * Prints the locations of the planets in the system to the specified stream
  */
- void printSystem(FILE stream)
+ void printSystemLocations(FILE stream)
  {
 	 
  }
 
 void simulate(gravitySystem *system)
 {
-	long long acceleration[DIMENSION];
+	double acceleration[DIMENSION];
 	for (int i = 0; i < DIMENSION; i++)
 	{
-		force[i] = 0;
+		acceleration[i] = 0;
 	}
 	
 	/* TODO cut the number of distance calculations in half - it will calculate
@@ -62,7 +62,7 @@ void simulate(gravitySystem *system)
 			}
 
 			
-			long long distanceSquared = 0;
+			double distanceSquared = 0;
 			
 			/* calculate force before dividing by r^2 and calculate r^2 */
 			for (int k = 0; k < DIMENSION; k++)
