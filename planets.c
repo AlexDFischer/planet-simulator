@@ -26,7 +26,7 @@ gravitySystem *makeSystem(int numPlanets)
  * 
  * FORMAT:
  * [[planet num]]
- * 
+ * xloc,yloc,zloc,...
  */
 void printSystemLocations()
 {
@@ -43,7 +43,7 @@ void printSystemLocations()
 
 void simulate(gravitySystem *system)
 {
-	long long force[DIMENSION];
+	long long acceleration[DIMENSION];
 	for (int i = 0; i < DIMENSION; i++)
 	{
 		force[i] = 0;
@@ -69,20 +69,20 @@ void simulate(gravitySystem *system)
 			{
 				distanceSquared += (system->objects[i].location[k]-system->objects[j].location[k])
 								 * (system->objects[i].location[k]-system->objects[j].location[k]);
-				force[k] +=  * system->objects[i].mass * system->objects[j].mass / system->inverseG;
+				force[k] +=  * system->objects[j].mass / system->inverseG;
 			}
 		}
 		/* Now divide the force at each component by r^2 */
 		for (int k = 0; k < DIMENSION; k++)
 		{
-			force[k] /= distanceSquared;
+			acceleration[k] /= distanceSquared;
 		}
 			
 		/* now we add to the velocity of each planet, with f = ma, so f*(delta t)/m = delta v */
 		for (int k = 0; k < DIMENSION; k++)
 		{
 			system->objects[i].position += system->objects[i].velocity * system->tickSeconds;
-			system->objects[i].velocity += force[k] * system->tickSeconds / system->objects[i].mass;
+			system->objects[i].velocity += acceleration[k] * system->tickSeconds;
 		}
 	}
 }
