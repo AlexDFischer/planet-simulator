@@ -14,7 +14,7 @@ gravitySystem *makeSystem(int numPlanets)
 	
 	/* now set the pointers in the objects array to the rights pointers */
 	object *objPtr = system + sizeof(gravitySystem);
-3	for (int i = 0; i < numPlanets; i++)
+	for (int i = 0; i < numPlanets; i++)
 	{
 		system->objects[i] = objPtr;
 		objPtr++;
