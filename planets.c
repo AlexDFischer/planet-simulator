@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include "planets.h"
 
 /**
@@ -8,33 +9,20 @@
  */
 gravitySystem *makeSystem(int numPlanets)
 {
-	int bytesNeeded = sizeof(gravitySystem) + numPlanets * sizeof(planet);
+	int bytesNeeded = sizeof(gravitySystem) + numPlanets * sizeof(object);
 	gravitySystem *system = (gravitySystem *)malloc(bytesNeeded);
 	system->G = STANDARD_GRAVITY;
 	
 	/* now set the pointers in the objects array to the rights pointers */
-	object *objPtr = system + sizeof(gravitySystem);
-	for (int i = 0; i < numPlanets; i++)
-	{
-		system->objects[i] = objPtr;
-		objPtr++;
-	}
-}
-
-/**
- * Prints the locations of the planets in the system to the standard output stream.
- * 
- * FORMAT:
- * [[planet num]]
- * xloc,yloc,zloc,...
- */
-void printSystemLocations()
-{
-	
+	system->objects = (object *)(system + 1);
+	return system;
 }
 
 /**
  * Prints the locations of the planets in the system to the specified stream
+ * FORMAT:
+ * [[planet num]]
+ * xloc,yloc,zloc,...
  */
  void printSystemLocations(FILE stream)
  {
@@ -67,21 +55,22 @@ void simulate(gravitySystem *system)
 			/* calculate force before dividing by r^2 and calculate r^2 */
 			for (int k = 0; k < DIMENSION; k++)
 			{
-				distanceSquared += (system->objects[i].location[k]-system->objects[j].location[k])
-								 * (system->objects[i].location[k]-system->objects[j].location[k]);
-				force[k] +=  * system->objects[j].mass / system->inverseG;
+				distanceSquared += (system->objects[i].loc[k]-system->objects[j].loc[k])
+								 * (system->objects[i].loc[k]-system->objects[j].loc[k]);
+				acceleration[k] += system->objects[j].mass * system->G;
+			}
+			/* Now divide the force at each component by r^2 */
+			for (int k = 0; k < DIMENSION; k++)
+			{
+				acceleration[k] /= distanceSquared;
 			}
 		}
-		/* Now divide the force at each component by r^2 */
-		for (int k = 0; k < DIMENSION; k++)
-		{
-			acceleration[k] /= distanceSquared;
-		}
+		
 			
 		/* now we add to the velocity of each planet, with f = ma, so f*(delta t)/m = delta v */
 		for (int k = 0; k < DIMENSION; k++)
 		{
-			system->objects[i].position += system->objects[i].velocity * system->tickSeconds;
+			system->objects[i].loc += system->objects[i].velocity * system->tickSeconds;
 			system->objects[i].velocity += acceleration[k] * system->tickSeconds;
 		}
 	}

@@ -3,8 +3,8 @@
 
 #include "planets.h"
 
-gravitySystem *makeSystem(int);
-void simulate(gravitySystem *);
+gravitySystem *makeSystem(int numPlanets);
+void simulate(gravitySystem *system);
 
 int main(int argc, char **argv)
 {
